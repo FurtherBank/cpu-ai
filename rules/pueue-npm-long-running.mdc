@@ -1,0 +1,55 @@
+---
+description: 用 Pueue（group + label）管理单一实例的持续运行任务，便于查状态、日志、失败与重启
+alwaysApply: true
+---
+
+# 持续运行命令：用 Pueue 托管
+
+适用于**适合单一实例、长期前台运行**且进程**不自行结束**的场景：例如 `npm run dev` / `pnpm dev` / `yarn dev`、`cargo watch`、本地静态 `serve`、自定义常驻 worker 等。客户端为 **`pueue`**，守护进程一般为 **`pueued`**；执行前需确认守护进程已启动（例如 `pueue status` 能正常返回）。
+
+## 命名约定（两个维度）
+
+将「工作目录 + 进程角色名」落到 Pueue 的两个字段上；**group / label 均不加 `npm-` 等包管理器或工具前缀**，避免与「这一条逻辑实例是谁」混淆。
+
+| 维度 | Pueue 字段 | 取值规则 | 示例（工作目录 `.../cpu-matrix`，跑前端 dev） |
+|------|------------|----------|---------------------------------------------|
+| 项目 / 工作区上下文 | **`--group`** | **`-w` 所设目录**的文件夹名（basename） | `cpu-matrix` |
+| 同类中的角色名 | **`--label`** | 在仓库内可读、可筛的短名：Node 常用 scripts 名（`dev`、`start`）；其它栈用约定名（如 `watch`、`api`、`worker`） | `dev` |
+
+同一工作目录下，**每个 `label` 默认只对应一条 Pueue 任务**（单一实例）。入队前执行 `pueue status -g <目录basename>`；若已有同 `label` 的任务，**优先复用**——异常时 **`restart` / `kill` 后再单条入队**，或 **`restart -ik`**，不要并联第二条相同 `group+label`。极少数需并行第二进程（不同端口、不同 `-w`）时，使用**另一** `label` 并自行避免端口与资源冲突。
+
+## 入队模板
+
+在**命令应对应的工作目录**执行（或对该目录使用 `-w`），并视需要加 `-i` 立即跑。示例为 `npm run dev`，`--` 之后可换成 `pnpm dev`、`cargo watch -x run` 等任意长驻命令：
+
+```bash
+pueue add -i \
+  -g "$(basename "$PWD")" \
+  -l "dev" \
+  -w "$(pwd)" \
+  -- npm run dev
+```
+
+- `-i` / `--immediate`：尽快开始跑（常见 dev server）。
+- 只入队、不立刻跑：去掉 `-i`，之后用 `pueue start` 或按组启动。
+
+## 工作流中如何确认状态与输出
+
+- **列表与是否运行中**：`pueue status -g <目录basename>`；或查询：`pueue status 'label=dev'`、`pueue status -g cpu-matrix 'status=running'`。
+- **结构化状态（脚本解析）**：`pueue status -j`（再结合 group/label 过滤）。
+- **已落盘日志（含已结束任务）**：`pueue log <TASK_ID>`，或 `pueue log -g <目录basename> -l 20`；完整输出加 `-f` / `--full`。
+- **跟跑中的实时输出**：`pueue follow <TASK_ID>`（类似 `tail -f`）。
+
+先从 `pueue status` 里取 **任务 id**，再对单个任务做 `log` / `follow` / `kill` / `restart`。
+
+## 报错与应对
+
+- **任务 failed**：看 `pueue log <TASK_ID> -f` 或 `pueue status`；修复环境或代码后 **`pueue restart -k <TASK_ID>`**（`-k` 立即跑）或 **`pueue restart -ik <TASK_ID>`** 原地重启（是否覆盖同 id 日志依本地配置）。
+- **进程僵死或需强制停**：**`pueue kill <TASK_ID>`**；停该目录下整组任务：**`pueue kill -g <目录basename>`**（会暂停该 group，需时再 `pueue group start <name>`）。
+- **从队列移除记录**：仅在任务非 running / 已 kill 后 **`pueue remove <TASK_ID>`**。
+
+## Agent 注意
+
+- 本工作空间根目录往往**不是**子项目根：务必 **`cd` 到该长驻命令所属目录**，或使用 **`-w` 指向该目录**；`group` 取该路径 **basename**，且**不要**再加 `npm-` 前缀。
+- 与用户「终端里手动前台」跑的进程区分：以 **`pueue status -g <目录basename>`** 为是否由 Pueue 托管的权威来源。
+- **禁止**在未处理已有任务的情况下再 `add` 一条相同 `group+label`，以免造成双实例；应先 `status`，再 `restart` / `kill` + 单条 `add`。极少数第二条并行进程见上文。
