@@ -7,6 +7,11 @@ alwaysApply: true
 
 适用于**适合单一实例、长期前台运行**且进程**不自行结束**的场景：例如 `npm run dev` / `pnpm dev` / `yarn dev`、`cargo watch`、本地静态 `serve`、自定义常驻 worker 等。客户端为 **`pueue`**，守护进程一般为 **`pueued`**；执行前需确认守护进程已启动（例如 `pueue status` 能正常返回）。
 
+## 核心原则
+
+- **同标签唯一运行**：同一 **`group + label`** 在任意时刻**至多有一条**正在跑的（含排队即将覆盖同一语义实例的）终端类任务；**设计上不存在、也不应设计**「同一标签要并行跑多条」的场景。若需第二套进程（不同端口、不同工作目录等），必须换用**不同 `label`**，不得复用同一标签硬并行。
+- **Agent 仅按标签索引任务**：AI 在查阅、指称、筛选 Pueue 托管任务时，**只能**使用 **`label`**（结合本文约定的 **`group` / 工作目录 basename 上下文**）。**禁止**以 **task id**、队列序号或其它次要键作为「主索引」来记录或沟通「是哪一个任务」；id 仅允许在人类操作或 CLI 强制参数下，由 **`pueue status`（按 group / label 过滤）临时解析**，不作为 Agent 侧的持久标识。
+
 ## 命名约定（两个维度）
 
 将「工作目录 + 进程角色名」落到 Pueue 的两个字段上；**group / label 均不加 `npm-` 等包管理器或工具前缀**，避免与「这一条逻辑实例是谁」混淆。
@@ -40,7 +45,7 @@ pueue add -i \
 - **已落盘日志（含已结束任务）**：`pueue log <TASK_ID>`，或 `pueue log -g <目录basename> -l 20`；完整输出加 `-f` / `--full`。
 - **跟跑中的实时输出**：`pueue follow <TASK_ID>`（类似 `tail -f`）。
 
-先从 `pueue status` 里取 **任务 id**，再对单个任务做 `log` / `follow` / `kill` / `restart`。
+若干子命令参数为 task id：先用 **`pueue status -g <目录basename>`**（或 `'label=…'` 等过滤）**按 label 锁定那条任务**，再在同一轮操作内从输出读取 id 调用 `log` / `follow` / `kill` / `restart`。**Agent 侧**仍须以 **label（+ group）** 为唯一索引，见上文「核心原则」；不得把 id 当作对外说明里的任务主键。
 
 ## 报错与应对
 
@@ -53,3 +58,4 @@ pueue add -i \
 - 本工作空间根目录往往**不是**子项目根：务必 **`cd` 到该长驻命令所属目录**，或使用 **`-w` 指向该目录**；`group` 取该路径 **basename**，且**不要**再加 `npm-` 前缀。
 - 与用户「终端里手动前台」跑的进程区分：以 **`pueue status -g <目录basename>`** 为是否由 Pueue 托管的权威来源。
 - **禁止**在未处理已有任务的情况下再 `add` 一条相同 `group+label`，以免造成双实例；应先 `status`，再 `restart` / `kill` + 单条 `add`。极少数第二条并行进程见上文。
+- **索引与沟通任务**：与健康检查、排障、向用户说明「当前跑的是哪条任务」时，**只引用 `label`（及隐含或显式的 group / 目录）**；**不要**以 task id 作为 Agent 侧检索或回复中的主键。文档内示例里出现的 `<TASK_ID>` 只表示 CLI 占位，取得方式仍为 status 按 label 过滤。
