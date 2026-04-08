@@ -36,3 +36,6 @@ out/
 tmp/
 temp/
 *.tmp
+
+# `npx skills add` installs under .agents/; canonical skills live in skills/
+.agents/

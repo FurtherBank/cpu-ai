@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "find-skills": {
+      "source": "rohitg00/skillkit",
+      "sourceType": "github",
+      "computedHash": "fb8b9a5649307397b26d3f965df1701252476f996653ee0d6e93943b61155ced"
+    }
+  }
+}
