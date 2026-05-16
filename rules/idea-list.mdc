@@ -50,3 +50,6 @@ alwaysApply: true
 
 **备注**：其他注意事项、参考资料、来源等
 -->
+
+## Sider skill
+实现一个 sider skill，可以读取 sider 聊天标题列表、聊天内容。

@@ -1,0 +1,87 @@
+{
+  "branchName": "ralph/feature",
+  "coverageTarget": "80%",
+  "targetSourceFiles": [
+    "app/modules/fecodex/service/AssetCreate.ts",
+    "app/modules/fecodex/service/AssetLibrary.ts"
+  ],
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add login form",
+      "acceptanceCriteria": [
+        "Email/password fields",
+        "Validates email format",
+        "typecheck passes",
+        "test coverage >= 80%",
+        "All branches covered (including error paths)",
+        "Boundary value testing (empty input,超长输入)"
+      ],
+      "currentCoverage": "0%",
+      "priority": 1,
+      "passes": false,
+      "notes": "",
+      "uncoveredLines": [],
+      "testStrategy": "Deep branch coverage + Boundary value analysis",
+      "targetFiles": []
+    }
+  ],
+  "testQualityRequirements": {
+    "minBranchCoverage": 80,
+    "minLineCoverage": 80,
+    "forbiddenPatterns": [
+      "Tests that only verify method existence (e.g., assert(typeof fn === 'function'))",
+      "Tests that assert input equals itself (e.g., assert.strictEqual(input.code, ''))",
+      "Tests without concrete assertions on actual return values",
+      "Tests that only create objects without calling functions",
+      "Redundant tests that cover the same branch"
+    ],
+    "requiredPatterns": [
+      "Each test MUST call the actual function being tested",
+      "Each test MUST verify actual behavior (return values, side effects, exceptions)",
+      "At least one test for each if/else branch",
+      "At least one test for each exception throw point",
+      "Boundary values (0, 1, null, undefined, empty string) must be tested",
+      "Test descriptions MUST reference line numbers from coverage report"
+    ],
+    "verificationScript": "node specmd/weavefox-test-loop/scripts/verify-tests.js",
+    "sandboxVerificationScript": "node specmd/weavefox-test-loop/scripts/verify-tests.js --sandbox",
+    "coverageAnalysisScript": "node specmd/weavefox-test-loop/scripts/verify-tests.js --report",
+    "autoRejectIf": [
+      "Coverage does not improve after adding tests",
+      "verify-tests.js detects CRITICAL anti-patterns"
+    ]
+  },
+  "sandboxModeConfig": {
+    "description": "Sandbox mode is enabled via IN_WEAVEFOX_SANDBOX environment variable. When enabled, tests will not be executed - static code analysis is used instead to ESTIMATE coverage.",
+    "howToEnable": "export IN_WEAVEFOX_SANDBOX=true",
+    "howCoverageIsCalculated": {
+      "method": "Static code analysis - no test execution",
+      "steps": [
+        "1. Parse source files to identify all branches (if/else/switch/catch/ternary/throw)",
+        "2. Parse test files to extract test descriptions and function calls",
+        "3. Match test descriptions to source branches using:",
+        "   - Line number references (e.g., 'line 45', 'L45-50')",
+        "   - Branch keywords (e.g., 'if', 'else', 'when', 'error', 'exception')",
+        "4. Calculate branch coverage = (matched branches / total branches) * 100%",
+        "5. Estimate line coverage = branchCoverage * 0.85 + 10 (empirical formula)"
+      ],
+      "accuracy": "Estimated values may differ from actual coverage by 5-15%",
+      "improveAccuracy": [
+        "Include line numbers in test descriptions: it('line 45-47: should handle empty input', ...)",
+        "Use descriptive keywords: it('should throw error when invalid', ...)",
+        "Add coverage comments: // Covers: line 45-47 (empty validation)"
+      ]
+    },
+    "verificationSteps": [
+      "Set environment: export IN_WEAVEFOX_SANDBOX=true",
+      "Run: node scripts/verify-tests.js --sandbox",
+      "Run: node scripts/verify-tests.js --report",
+      "Run: node scripts/verify-tests.js --analyze <source-file>",
+      "Review uncovered branches and add corresponding tests",
+      "Update uncoveredLines based on analysis output",
+      "Update currentCoverage with estimated percentage (mark as estimated)"
+    ],
+    "notes": "Sandbox mode provides ESTIMATED coverage when test execution is not possible. Controlled by IN_WEAVEFOX_SANDBOX environment variable. Always verify with real tests when environment allows."
+  }
+}
