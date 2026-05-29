@@ -103,6 +103,7 @@ grep -n "#### \[req_" webtape-workspace/recordings/<hostname>/<session>/_context
 - 写操作必须有：前置只读状态查询 + `inquirer.confirm({ default: false })`
 - 分页循环必须有三重终止：`end === true || list.length < pageSize || all.length >= (total ?? Infinity)`
 - 401/403 统一提示：「请确认 Chrome 已登录 [hostname]，然后重试」
+- 依赖系统代理访问外网的站点，命令本体必须让 Node/`chromeFetch` 能读取环境代理（如 Node 25+ 的 shebang 使用 `#!/usr/bin/env -S node --use-env-proxy`，或项目内等价代理方案）；不得只在测试命令前手动加一次性 `NODE_OPTIONS=--use-env-proxy`
 
 **实现结构模板**：
 
@@ -156,6 +157,19 @@ cd /Users/lrt/Desktop/ai-workspace/cpu-cli-tool && npx tsc --noEmit 2>&1 | grep 
 
 若有错误，修复后重新检查，直到该文件无类型错误。
 
+随后必须执行一次真实 CLI 命令本体，复现录制中的核心只读请求：
+
+```bash
+cd /Users/lrt/Desktop/ai-workspace/cpu-cli-tool
+<cmdName> <sub-command> <使用录制中的真实参数>
+```
+
+要求：
+- 不得只用 fixture、录制 JSON、单元函数或临时 Node 脚本替代真实命令
+- 若命令需要写文件，必须验证目标文件真实生成
+- 若命令失败，先定位失败层级：Node/CLI 网络层（如未走代理导致连接超时）、站点反爬/挑战（如 Cloudflare challenge 403）、鉴权失败（401/403 且非 challenge）、代码逻辑/解析错误
+- 若 `curl` 能访问但 Node `fetch`/`chromeFetch` 超时，优先检查代理环境是否被 Node 读取；修复后重新执行真实命令
+
 ---
 
 ## 返回给主控的内容
@@ -182,4 +196,9 @@ cd /Users/lrt/Desktop/ai-workspace/cpu-cli-tool && npx tsc --noEmit 2>&1 | grep 
 
 ### 录制缺口（若有）
 <若有写操作缺口，在此列出补录需求；否则写「无」>
+
+### 真实命令验证
+- 执行命令：`<完整命令>`
+- 结果摘要：<成功输出 / 失败输出>
+- 失败层级：网络层 / 反爬挑战 / 鉴权 / 代码逻辑 / 无
 ```

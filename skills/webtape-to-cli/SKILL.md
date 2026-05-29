@@ -180,6 +180,9 @@ cd /Users/lrt/Desktop/ai-workspace/cpu-cli-tool && npx tsc --noEmit
 
 - 每个用例必须实际执行，给出完整命令 + 完整输出 + 通过/失败判定
 - 声称「已通过」但无实际输出的测试项视为未执行
+- **必须测试真实 CLI 命令本体**：不得只用 fixture、录制响应、单元函数或手写脚本证明通过；至少一次执行最终用户会运行的全局命令（如 `<cmdName> ...`），并用录制中的真实 ID/参数复现核心 GET 请求与输出落盘结果
+- **必须区分失败层级**：真实命令失败时，先判断是 Node/CLI 网络层（如直连超时、未读取系统代理）、站点反爬/挑战（如 Cloudflare challenge 403）、鉴权失败（401/403 且非 challenge）、还是代码逻辑/解析错误；报告中要写出判定证据
+- **代理环境必须纳入验证**：若 `curl` 能访问目标站点但 Node `fetch`/`chromeFetch` 超时，应检查 `http_proxy`/`https_proxy`/`all_proxy` 与 Node 是否启用环境代理（Node 25+ 可用 `--use-env-proxy` 或等价方案）；修复后必须不依赖手动前缀即可直接运行命令
 - 你是独立的测试工程师，职责是找出问题，而不是确认「没问题」
 - 全部通过后，再额外测试你认为最薄弱的边界场景
 
@@ -197,6 +200,7 @@ cd /Users/lrt/Desktop/ai-workspace/cpu-cli-tool && npx tsc --noEmit
 ### ✅/❌ 用例 X：${描述}
 - 执行操作：${完整命令}
 - 预期 / 实际 / 证据（完整输出）
+- 失败层级判断：网络层 / 反爬挑战 / 鉴权 / 代码逻辑 / 无
 
 ## 额外发现
 ${测试中发现的其他问题}
@@ -212,4 +216,5 @@ ${测试中发现的其他问题}
 2. **阶段二各子流程 Subagent 完全独立**，不得共享上下文，各自只读自己的录制文件
 3. 写操作接口无录制时，Subagent 必须返回「补录需求」而不是猜测实现
 4. **阶段三编译失败时，定向修复**：只重发有问题的子命令文件，不重发所有子命令
-5. 参考文档：[排雷指南](.cursor/skills/webtape-to-cli/references/landmine-guide.md) | [编码规则](.cursor/skills/webtape-to-cli/references/coding-rules.md) | [噪音识别规则](.cursor/skills/webtape-to-cli/references/noise-filter-rules.md)
+5. **验收必须用真实命令复现录制链路**：对于只读接口，至少跑一次列表/详情等核心命令，确认能从站点返回真实数据并按设计输出/落盘；若失败，要先给出失败层级而不是直接归因为网站反爬
+6. 参考文档：[排雷指南](.cursor/skills/webtape-to-cli/references/landmine-guide.md) | [编码规则](.cursor/skills/webtape-to-cli/references/coding-rules.md) | [噪音识别规则](.cursor/skills/webtape-to-cli/references/noise-filter-rules.md)
