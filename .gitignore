@@ -39,3 +39,6 @@ temp/
 
 # `npx skills add` installs under .agents/; canonical skills live in skills/
 .agents/
+
+# skills/ 下通过软链接引用的技能（见 AGENTS.md）；每新增一条链接须在此登记路径
+# 示例：skills/my-external-skill/
