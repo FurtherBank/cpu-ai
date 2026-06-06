@@ -1,4 +1,4 @@
 interface:
   display_name: "ChatGPT/Sider Subject Purify"
   short_description: "拉取 ChatGPT 和 Sider 对话并净化为主题体系"
-  default_prompt: "Use $chatgpt-subject-purify to pull ChatGPT and Sider chats into a cpu-matrix subject and create a complete info-purify core judgment."
+  default_prompt: "Use $chatgpt-subject-purify to run a Subagent pull phase for ChatGPT/Sider chats, then integrate the summary into a cpu-matrix subject with info-purify core context."
