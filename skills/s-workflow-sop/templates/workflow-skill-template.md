@@ -66,6 +66,8 @@ ${根据执行模式选择下方模板}
 
 **产出**：${产出物描述及格式}
 
+**Audit Hook**：本阶段完成后更新行为日志「关键行为」「影响清单」（若有材料性变更）；详见目标 Skill 的 `references/audit-quality-standards.md`。
+
 实际执行到该步骤时，必须阅读 [workflow/${step_name}.md](workflow/${step_name}.md)，并按其中指导完成。
 
 ---
@@ -104,9 +106,13 @@ ${Guidance 要素或指导文件路径；该项必传}
 ## 返回格式
 
 ${返回格式}
+
+若本阶段为显式 Skill 子调用，返回须额外包含：
+- `behaviorLogPath`：子 Skill 行为日志 workspace-relative 路径
+- `材料性影响摘要`：供父 Skill 写入影响清单的一行摘要
 \`\`\`
 
-主控等待 Subagent 返回后，进入下一阶段。
+主控等待 Subagent 返回后，在父 Skill 行为日志「子 Skill 调用」表登记子日志链接，并进入下一阶段。
 
 ---
 
@@ -117,6 +123,8 @@ ${返回格式}
 校验清单：
 - [ ] ${校验项 1}
 - [ ] ${校验项 2}
+- [ ] 行为日志协议章节存在且触发点无空占位（`$behavior-log-audit`）
+- [ ] `references/audit-quality-standards.md` 存在且阶段 Audit Hook 行齐全
 - [ ] ...
 
 校验全部通过后进入测试阶段。任何校验失败，回退到对应步骤修复。

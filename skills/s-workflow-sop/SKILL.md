@@ -184,8 +184,9 @@ ${阶段一场景实例：背景与目标；约束；信息盲区；核心制约
   - 内容正确性：「步骤描述须使用动词+对象格式，不含模糊动词（分析/处理/优化）」
   - 接口对齐：「输出的 ${字段} 可被下游节点直接作为 ${输入} 消费，无需转换」
   - 覆盖度：「须覆盖 N 个场景，每个场景有对应的 DoD 验证点」
+  - 可审计性：「该节点完成后行为日志须更新章节 X、Y；Subagent 返回须含 behaviorLogPath（若适用）」——参照 `$behavior-log-audit` 与 [references/behavior-log-audit-bridge.md](references/behavior-log-audit-bridge.md)
 
-**Execution Mode**：主控执行（高污染、高风险原子操作交 Subagent）。本 Skill 的**工作流阶段**须与 `TodoWrite` 待办项**一一对应**，不得跳过阶段或擅自合并步骤。输出子工作流骨架（含各节点契约与质量标准），并为每个节点同步填写四要素种子：Input 硬依赖骨架（上游产出的必要输入）、Goal 骨架（Delta + 完成判定框架，与质量标准对应）、Execution Mode 架构决策（主控/Subagent）。
+**Execution Mode**：主控执行（高污染、高风险原子操作交 Subagent）。本 Skill 的**工作流阶段**须与 `TodoWrite` 待办项**一一对应**，不得跳过阶段或擅自合并步骤。输出子工作流骨架（含各节点契约与质量标准），并为每个节点同步填写四要素种子：Input 硬依赖骨架（上游产出的必要输入）、Goal 骨架（Delta + 完成判定框架，与质量标准对应）、Execution Mode 架构决策（主控/Subagent）。**每个节点的质量标准须含可审计性维度**（Audit Hook 落点）。
 
 ---
 
@@ -206,8 +207,8 @@ ${阶段一场景实例：背景与目标；约束；信息盲区；核心制约
 **层一（填充）— Input 软上下文**：在阶段四硬依赖骨架基础上，识别执行中「按需查阅」的背景信息（规范文档、方法论引用、目录结构等），以文件路径/章节引用形式提供，禁止全量注入。判断口径：删掉会让 Agent 用幻觉填补的是硬依赖（阶段四已给出）；按需翻阅的是软上下文。
 
 **层二（精炼）— Goal 与 Execution Mode**：在阶段四骨架基础上细化，**禁止重写质量标准**：
-- Goal：补充**交付物物理形态**（如「输出含 X 字段的 JSON」「在终端执行带 4 个参数的命令」）与 **Negative Prompts**（如「不准在本步骤生成代码」），不得另起炉灶定义质量标准。
-- Execution Mode：补充工具/命令级动作与产出，确认阶段四架构决策；若环节存在嵌套（即为**子工作流**），内层环节同样递归完成四要素。
+- Goal：补充**交付物物理形态**（如「输出含 X 字段的 JSON」「在终端执行带 4 个参数的命令」）与 **Negative Prompts**（如「不准在本步骤生成代码」），不得另起炉灶定义质量标准；**工作流型 Skill 须含 Audit Hook**：本阶段完成后须更新行为日志哪些章节。
+- Execution Mode：补充工具/命令级动作与产出，确认阶段四架构决策；若环节存在嵌套（即为**子工作流**），内层环节同样递归完成四要素；Subagent 委派须在返回格式含 `behaviorLogPath`（显式 Skill 调用）或父日志一行摘要（纯 Task）。
 
 **层三（创作）— Guidance 专家萃取**（本阶段唯一从零出发的工作）：
 - **正常路径**：提炼专家顺利执行时的第一反应，沉淀可区分新手与专家的操作要诀。
@@ -229,6 +230,7 @@ ${阶段一场景实例：背景与目标；约束；信息盲区；核心制约
 
 **Guidance**：
 - **校验（Validation）**：面向**形式与静态事实**（结构完整性、字段规范符合性、产物契约对齐），设计为**主控自执行节点**，直接在对应环节的 Goal 完成判据或其后插入自检清单。
+- **行为日志完整性（必检项）**：对照 `$behavior-log-audit` 的 [validate-log.md](../behavior-log-audit/workflow/validate-log.md) 与目标 Skill 的 `references/audit-quality-standards.md`，在 Skill 封口前校验日志结构、阶段 Audit Hook 覆盖、子 Skill 链（若适用）。
 - **测试（Testing）**：面向**行为与功能验证**（功能/目标符合性、端到端贯通、场景覆盖度），设计为**Subagent 委派节点**；须预先写好派发 Prompt 模板，包含明确验证标准、强制证据要求、报告格式，禁止以「要认真测试」类劝诫替代具体指令。
 - 嵌入位置：置于**产物生成后、下游环节依赖前**；避免在每个微步骤后堆砌，优先聚焦高风险/不可逆产物节点。
 
@@ -250,6 +252,7 @@ ${阶段一场景实例：背景与目标；约束；信息盲区；核心制约
 - **主控与上下文**：强上下文依赖步骤标为**主控执行**，且通过「指导文件链接 + 摘要」做索引式加载，细节在对应 `workflow/*.md`。
 - **测试与质量闸门**：测试类环节须通过 Subagent 执行；测试派发 Prompt 须符合 [references/pua-testing.md](references/pua-testing.md) 定义的**质量关卡与证据契约**，避免仅写「要认真测试」类劝诫。
 - **可发现性与链接**：YAML `description` 同时体现 **WHAT**（做什么）与 **WHEN**（何时启用）；`name` 与目录命名协调；文内引用的 `workflow/`、`references/`、`templates/` 路径存在且相对链接可解析。
+- **可审计性（必达）**：调用 `$behavior-log-audit` 完成注入——`SKILL.md` 含「行为日志执行协议」节；`references/audit-quality-standards.md` 存在；各阶段含 Audit Hook；Subagent 返回格式含 `behaviorLogPath`（若适用）。详见 [workflow/inject-new-skill.md](../behavior-log-audit/workflow/inject-new-skill.md)。
 - **术语**：全文术语与前置阶段及本 Skill 前文一致，无同一概念多种叫法。
 
 **Guidance**：以 [templates/workflow-skill-template.md](templates/workflow-skill-template.md) 为目录与 `SKILL.md` 形态的**唯一参照**；不在本阶段重写业务规则，前置阶段定稿内容只做映射和拆分。
