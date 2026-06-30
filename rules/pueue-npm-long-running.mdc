@@ -25,7 +25,15 @@ alwaysApply: true
 
 ## 入队模板
 
-在**命令应对应的工作目录**执行（或对该目录使用 `-w`），并视需要加 `-i` 立即跑。示例为 `npm run dev`，`--` 之后可换成 `pnpm dev`、`cargo watch -x run` 等任意长驻命令：
+在**命令应对应的工作目录**执行（或对该目录使用 `-w`），并视需要加 `-i` 立即跑。示例为 `npm run dev`，`--` 之后可换成 `pnpm dev`、`cargo watch -x run` 等任意长驻命令。
+
+入队前先 `pueue status -g <目录basename>`；若提示 group 不存在，先创建（每个目录只需一次）：
+
+```bash
+pueue group add "$(basename "$PWD")"
+```
+
+再入队：
 
 ```bash
 pueue add -i \
@@ -50,8 +58,8 @@ pueue add -i \
 
 ## 报错与应对
 
-- **任务 failed**：看 `pueue log <TASK_ID> -f` 或 `pueue status`；修复环境或代码后 **`pueue restart -k <TASK_ID>`**（`-k` 立即跑）或 **`pueue restart -ik <TASK_ID>`** 原地重启（是否覆盖同 id 日志依本地配置）。
-- **进程僵死或需强制停**：**`pueue kill <TASK_ID>`**；停该目录下整组任务：**`pueue kill -g <目录basename>`**（会暂停该 group，需时再 `pueue group start <name>`）。
+- **任务 failed**：看 `pueue log <TASK_ID> -f` 或 `pueue status`；修复环境或代码后 **`pueue restart -k <TASK_ID>`**（`-k` 立即跑）或 **`pueue restart -ik <TASK_ID>`** 原地重启（`-i/--in-place` 会覆盖该 task 已有日志）。
+- **进程僵死或需强制停**：**`pueue kill <TASK_ID>`**；停该目录下整组任务：**`pueue kill -g <目录basename>`**（会暂停该 group，需时再 **`pueue start -g <目录basename>`** 恢复）。
 - **从队列移除记录**：仅在任务非 running / 已 kill 后 **`pueue remove <TASK_ID>`**。
 
 ## Agent 注意
