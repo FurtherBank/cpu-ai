@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Validate"
+  short_description: "Validate skill why from what and how"
+  default_prompt: "Use $s-skill-validate to validate whether a skill implies its design why without over-explaining it."
