@@ -1,0 +1,7 @@
+interface:
+  display_name: "Attention Budget Constraint"
+  short_description: "Protect critical confirmation points"
+  default_prompt: "Use $attention-budget-constraint to handle a dense reasoning or writing task without diluting critical confirmation points."
+
+policy:
+  allow_implicit_invocation: true
