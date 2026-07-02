@@ -93,7 +93,7 @@ Guidance 可包含三类内容：
 - 有现成规范时，给出文件路径或章节引用。
 - 有经验性判断时，说明它适用的场景和避免的问题。
 - 有异常提示时，写清识别信号和处理方向。
-- 当环节包含多个高承重点，且后续需要统一判断、总方案或框架整合时，引用 [attention-budget-integration-guidance.md](attention-budget-integration-guidance.md)。此类环节必须先让每个承重点完成单点封口，再进入关系判断和整合；不得为了降低整合上下文难度而削弱上游单点探索。
+- 当环节包含多个高承重内容单元，且后续需要统一判断、总方案或框架整合时，引用 [attention-budget-integration-guidance.md](attention-budget-integration-guidance.md)。此类环节必须先让每个承重内容单元完成单点封口，再进入关系判断和整合；不得为了降低整合上下文难度而削弱上游单点探索。
 
 示例：
 

@@ -1,6 +1,6 @@
 ---
 name: discussion-mindset
-description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, without turning the skill into a fixed output template, validation workflow, or execution plan.
+description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, while referencing f-attention-budget-constraint for attention-budget gating instead of duplicating that protocol, without turning the skill into a fixed output template, validation workflow, or execution plan.
 ---
 
 # 研讨心态
@@ -12,6 +12,12 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 它要校准的是 agent 的注意力落点：不要先问“我怎样把这轮答案写完整”，而要先问“在现实约束内，哪些方向更可能把问题推向更高价值区域”。
 
 研讨心态可以产生文字、列表、问题包或草图，但这些只是方向校准的外化痕迹，不是本 skill 的本体。不要为了满足某个固定输出结构，把真正承重的方向判断、灵魂点、反例或下一问题平均化，也不要为了显得收束而过早压成单一主线。
+
+## 外部约束引用
+
+本 skill 依赖 [`f-attention-budget-constraint`](../f-attention-budget-constraint/SKILL.md) 处理注意力预算，不在本文复制其闸门、动作分档、Subagent 隔离、可审计记录或后置校验规则。
+
+凡研讨中出现会改变后续走向的方向判断、核心命名、候选筛选、现实约束解释、分支关系或下一问题，先按 `f-attention-budget-constraint` 当前版本确认；本 skill 只说明这些承重内容单元在研讨语境中通常出现在哪里，以及确认后如何继续研讨。
 
 ## 核心定义
 
@@ -69,7 +75,7 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 4. 哪些现实约束必须从一开始就扣住，防止候选变成幻想？
 5. 本轮最有价值的结果，可能是核心判断、候选池、反例、被忽略变量、下一问题，还是多个分支的并置？
 
-如果这些问题的答案会显著改变后续走向，把它们当作承重内容单元处理：先局部聚焦，必要时隔离聚焦，再进入主线。若多个答案分别导向不同路线，不要为了形成一个“最优答案”而立刻压平。
+如果这些问题的答案会显著改变后续走向，按 [`f-attention-budget-constraint`](../f-attention-budget-constraint/SKILL.md) 的承重内容单元闸门处理。若多个答案分别导向不同路线，不要为了形成一个“最优答案”而立刻压平。
 
 ## 多分支研讨
 
@@ -86,9 +92,9 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 
 1. 分支很少且关系清楚时，在主线内并置比较。
 2. 分支各自承重但仍能在当前上下文处理时，分成独立小节或草稿区，分别确认后再整合。
-3. 分支多、差异大、互相污染，或每个分支都需要独立方向感时，考虑 fork 探讨或多 Subagent 并行探讨。
+3. 分支多、差异大、互相污染，或每个分支都需要独立方向感时，按 [`f-attention-budget-constraint`](../f-attention-budget-constraint/SKILL.md) 的隔离聚焦规则处理。
 
-使用 fork 或 Subagent 时，给每个分支显式注入必要上下文：
+需要隔离聚焦时，本 skill 只补充每个研讨分支的语义载荷：
 
 - 整体研讨对象和当前非目标。
 - 该分支要探讨的精确灵魂点、假设或下一问题。
@@ -188,5 +194,5 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 5. 它优先寻找灵魂点：本质判断、新命名、新视角、被忽略变量、关键反例、原生实现路径或下一问题；灵魂点可以有多个，不必预设唯一。
 6. 它区分结果价值和搜索质量：结果价值常需后续反馈，搜索质量可通过新信息、约束检查、攻击质量和下一问题来观察。
 7. 它不吸收验证、PoC、淘汰和执行收束；这些由上层工作流承接。
-8. 它允许多分支研讨：当多个灵魂点或下一问题会导向不同路线时，先保留分叉，必要时用 fork 或 Subagent 隔离探讨，再整合关系。
-9. 它与注意力预算天然配合：方向判断、核心命名、候选筛选、现实约束、分支关系和下一问题都是可能改变后续走向的承重内容单元，不能在顺手写作中确认。
+8. 它允许多分支研讨：当多个灵魂点或下一问题会导向不同路线时，先保留分叉；是否需要隔离聚焦及如何隔离，引用 `f-attention-budget-constraint` 的当前规则。
+9. 它与注意力预算天然配合：方向判断、核心命名、候选筛选、现实约束、分支关系和下一问题都是研讨语境里的常见承重内容单元；具体确认机制以 `f-attention-budget-constraint` 为准。
