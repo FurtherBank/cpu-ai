@@ -1,0 +1,4 @@
+interface:
+  display_name: "Derive Task Quality Scope"
+  short_description: "Derive evidence-backed quality obligations for a task"
+  default_prompt: "Use $derive-task-quality-scope to determine the bounded quality obligations and evidence gates for this task."

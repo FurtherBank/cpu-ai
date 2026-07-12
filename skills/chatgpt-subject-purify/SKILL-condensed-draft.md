@@ -1,35 +1,8 @@
----
-name: chatgpt-subject-purify
-description: WHAT：通过 aichat 命令把 ChatGPT App 与 Sider 对话拉取到 ai-workspace/cpu-matrix 的 chats 资产区，围绕一个特定 subject 做分类、筛选、索引更新，并调用 info-purify 把该主题整理成完整、可追溯、可维护、可继续讨论的核心上下文体系。WHEN：用户要求“拉取 ChatGPT/Sider 聊天并整理到某个主题”“为某个 subject 补充聊天材料”“筛选 ai-workspace 中某主题相关问题”“用 info-purify 定义清楚某主题完整内容”“像成长与人生决策那样重建主题核心上下文”时使用。
----
+# chatgpt-subject-purify（凝练重构实验稿）
 
-# chatgpt-subject-purify
+> 实验稿，未启用。按「凝练表达形态」主题的推荐组合重构：产物职责句 + 唯一收录判据 + 标注推论承载一致性约束；政策约定单列；逆默认回归防线外置到 [references/integration-regression-checklist.md](references/integration-regression-checklist.md)。对照原版：[SKILL.md](SKILL.md)。
 
-执行该 Skill 的默认意图是：**拉取散落在 ChatGPT App、Sider 与 `cpu-matrix/public/chats/` 中的对话，并将这一次新拉取的对话内容，整理收束到 subjects 文件夹中，形成完整的待讨论主题内容体系。**  
-
-这个 Skill 的终点不是“写一个大纲”，也不是把原始问答流水账搬进核心文件，而是把材料净化成可继续讨论、可联合其他已确定内容使用的高质量上下文资产。默认生成或更新：
-
-- `cpu-matrix/public/subjects/<主题>/核心上下文.md`
-- `cpu-matrix/public/subjects/<主题>/主题边界.md`
-- `cpu-matrix/public/subjects/<主题>/索引.md`
-- 必要时的底层概念定义文件，例如 `成长.md`
-- 审计模式、长期维护、高风险或用户明确要求时的净化日志记录文件，例如 `净化日志.md` 或 `工作记录.md`
-
-这个 Skill 与 `$info-purify` 共同构成一条流水线：本 Skill 承担“拉取、分类、筛选、归档路径和主题资产编排”，`info-purify` 承担“信息体系降熵的方法、校验和必要追溯”。主题主入口天然面向读者消费，承载核心上下文；台账、筛选细节和过程审计属于净化日志记录，不属于主题正文，只有被目标读者直接使用的风险、限制或来源锚点才会转译进入主入口。
-
-## 行为日志执行协议
-
-- **规范引用**：[behavior-log/v1 契约](../behavior-log-audit/references/behavior-log-v1-contract.md)；日志骨架：[behavior-log-skeleton.md](../behavior-log-audit/templates/behavior-log-skeleton.md)；可比对标准：[audit-quality-standards.md](references/audit-quality-standards.md)
-- **路径**：`{workspaceRoot}/.skill-logs/chatgpt-subject-purify/yyyy-mm-dd/hhmm-<任务标题slug>.md`
-- **初始化**：首次执行 `aichat sync` / `aichat view` 或写入 `cpu-matrix/public/subjects/` 之前；写入元数据、执行边界、固定章节骨架，状态 `执行中`。任务标题取用户给出的主题名或「`<主题>` 净化」一行摘要。
-- **增量更新触发点**：
-  - 行为日志初始化后、拉取 Subagent 返回「拉取阶段总结」后
-  - 整合阶段完成候选筛选记录后
-  - 更新 `核心上下文.md` / `主题边界.md` / `索引.md` 或概念文件后
-  - 整合步骤 5 校验完成后
-- **子 Skill / Subagent 契约**：拉取阶段 Subagent 为纯 Task（非显式 Skill），在父日志「关键行为」记一行摘要即可，不强制子文件；若 Subagent 自行创建行为日志，返回 `behaviorLogPath` 供父日志「子 Skill 调用」表登记（可选）
-- **封口**：交付口径汇报前；须完成整合步骤 5 校验或已记录审计缺口。更新顶层执行摘要、影响清单（含 `cpu-matrix` / `.cursor` 材料性变更）、资源索引（链接 subject 产物路径，不复制正文）。子 Skill 应有日志但未返回路径时，终态最高 `部分成功`，并在「偏离、异常与未决事项」记审计缺口
-- **与交付物边界**：`public/subjects/<主题>/` 与 `public/chats/` 为交付物/来源资产；`.skill-logs/` 为本次 Skill **执行过程**审计。`净化日志.md` 是主题内过程记录，与 workspace 级行为日志分工：前者服务主题长期维护，后者服务 Skill 链路审计
+意图：把散落在 ChatGPT App、Sider 与 `cpu-matrix/public/chats/` 的对话拉取进来，将**本次新拉取的内容**净化收束进 `cpu-matrix/public/subjects/<主题>/`，形成可继续讨论、可联合其他主题使用的高质量上下文资产。终点不是大纲，也不是问答流水账搬家。
 
 ## 工作流总览
 

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Crawl Dewu"
+  short_description: "把长视频转成高质量说话人文字稿"
+  default_prompt: "Use $crawl-dewu to turn a downloaded interview video into an accurate speaker-separated transcript and polished Markdown article."
+policy:
+  allow_implicit_invocation: true
