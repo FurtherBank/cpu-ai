@@ -1,0 +1,4 @@
+interface:
+  display_name: "推导认知工作流"
+  short_description: "从任务现实推导可执行、可验证且可回改的认知状态转换图"
+  default_prompt: "使用 $derive-cognitive-workflow 为这个具体任务推导可执行、可验证、可回改的认知工作流。"
