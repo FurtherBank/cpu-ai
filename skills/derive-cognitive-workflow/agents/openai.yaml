@@ -1,4 +1,4 @@
 interface:
-  display_name: "推导认知工作流"
-  short_description: "从任务现实推导可执行、可验证且可回改的认知状态转换图"
-  default_prompt: "使用 $derive-cognitive-workflow 为这个具体任务推导可执行、可验证、可回改的认知工作流。"
+  display_name: "逐层推导认知工作流"
+  short_description: "逐层推导任务认知状态图，每次默认只展开当前节点下一层"
+  default_prompt: "使用 $derive-cognitive-workflow 只展开当前任务或指定节点的下一层认知工作流，并保留后续递归交接。"
