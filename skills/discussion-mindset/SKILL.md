@@ -1,6 +1,6 @@
 ---
 name: discussion-mindset
-description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, while referencing f-attention-budget-constraint for attention-budget gating instead of duplicating that protocol, without turning the skill into a fixed output template, validation workflow, or execution plan.
+description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, while referencing f-attention-budget-constraint for attention-budget gating and arming f-hypothesis-ledger as the downstream ledger constraint (discussion stays in draft-zone semantics; the ledger's tripwires decide if accounts are ever built) instead of duplicating those protocols, without turning the skill into a fixed output template, validation workflow, or execution plan.
 ---
 
 # 研讨心态
@@ -18,6 +18,10 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 本 skill 依赖 [`f-attention-budget-constraint`](../f-attention-budget-constraint/SKILL.md) 处理注意力预算，不在本文复制其闸门、动作分档、Subagent 隔离、可审计记录或后置校验规则。
 
 凡研讨中出现会改变后续走向的方向判断、核心命名、候选筛选、现实约束解释、分支关系或下一问题，先按 `f-attention-budget-constraint` 当前版本确认；本 skill 只说明这些承重内容单元在研讨语境中通常出现在哪里，以及确认后如何继续研讨。
+
+本 skill 以 [`f-hypothesis-ledger`](../f-hypothesis-ledger/SKILL.md) 为承接约束，不在本文复制其绊线、账目或审计规则。每次加载研讨心态，即同时武装该协议：武装只是零开销的待命标注，是文本行为，不要求仓库或落盘；是否建账，只由该协议的建账绊线决定。研讨空间在其语义下整体处于草稿区——方向感知、灵魂点搜寻、多分支并置、反例攻击都不触发分型、不担对账义务；分支未被采纳前均在草稿区语义内，天然不触碰账本。
+
+相变点在研讨之外：当某个锋利判断被当作前提继续盖东西——跨语境复用、被后续工作依赖、声明为框架——台账条款在那一刻咬合。接力接口和下一问题正是这些锚点的上游物；交出它们之后的处置，以 `f-hypothesis-ledger` 当前版本为准。不要在研讨心态本体内建账、分型或对账；研讨中台账的全部痕迹只有武装态标注，以及知道相变点在哪。你对本轮搜索姿态好坏的判断属于该协议豁免的工作评估，不是触发审计的健康总评；这一归入以台账侧的豁免定义为权威。
 
 ## 核心定义
 
@@ -182,6 +186,7 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 - 做 PoC、实验设计、技术验证或用户验证。
 - 排优先级、淘汰候选、制定执行计划。
 - 把候选变成最终交付方案。
+- 为已采纳的判断建账、对账或接受审计——这些由 `f-hypothesis-ledger` 在研讨之外承接。
 
 如果用户明确要求这些动作，先判断是否需要短暂研讨来保留核心方向，然后切换到对应的执行、验证、规划或交付流程。
 
@@ -196,3 +201,4 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 7. 它不吸收验证、PoC、淘汰和执行收束；这些由上层工作流承接。
 8. 它允许多分支研讨：当多个灵魂点或下一问题会导向不同路线时，先保留分叉；是否需要隔离聚焦及如何隔离，引用 `f-attention-budget-constraint` 的当前规则。
 9. 它与注意力预算天然配合：方向判断、核心命名、候选筛选、现实约束、分支关系和下一问题都是研讨语境里的常见承重内容单元；具体确认机制以 `f-attention-budget-constraint` 为准。
+10. 它与假设台账以相变点衔接：研讨全程是台账语义下的草稿区，武装只是待命标注；锋利判断一旦被当作前提继续盖东西，处置以 `f-hypothesis-ledger` 为准。
