@@ -1,6 +1,6 @@
 ---
 name: discussion-mindset
-description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, while referencing f-attention-budget-constraint for attention-budget gating and arming f-hypothesis-ledger as the downstream ledger constraint (discussion stays in draft-zone semantics; the ledger's tripwires decide if accounts are ever built) instead of duplicating those protocols, without turning the skill into a fixed output template, validation workflow, or execution plan.
+description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, optionally handing finalized conclusions off to a complete explainer document (per references/conclusion-doc-writing-spec.md) when the user asks or the conclusions need durable reuse, while referencing f-attention-budget-constraint for attention-budget gating and arming f-hypothesis-ledger as the downstream ledger constraint (discussion stays in draft-zone semantics; the ledger's tripwires decide if accounts are ever built) instead of duplicating those protocols, without turning the skill into a fixed output template, validation workflow, or execution plan.
 ---
 
 # 研讨心态
@@ -168,6 +168,19 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 
 不要为了展示研讨而拖慢用户真正要的执行。
 
+## 研讨结论的落盘说明文档（可选交付）
+
+把研讨结论写成一份完整、可长期复用的说明文档，是研讨之外的交付动作，不是研讨本体的默认收尾。它就是本文末尾「如果用户明确要求这些动作……切换到对应的交付流程」所指的交付流程之一。
+
+仅在**用户明确要求**、或**结论需要长期复用 / 跨语境引用 / 交给第三方而口头小结已承载不住**时才做。只想让用户看见研讨过程、或留接力接口，用上面「对外呈现」的问题包即可，不要升级到这一步。
+
+触发时，按 [`references/conclusion-doc-writing-spec.md`](references/conclusion-doc-writing-spec.md) 写作，本文只给要点，完整规格与自检清单在该 reference：
+
+- **前置硬条件**：文档要写的每个核心结论必须已单点封口；文档是整合呈现，不在写作时补推导。
+- **产出方式**：研讨上下文较重时，fork 一个 Subagent 承担写作（用 `f-attention-budget-constraint` 的 fork 方式继承整段研讨历史，从而拿到全部封口结论），该写作线程走 `f-attention-budget-constraint`，把核心定义、每个叙事例子、边界与置信声明当承重内容单元处理。上下文很轻时可不 fork，直接在主线按规格写。
+- **体裁要点**：按读者动线组织，不照搬推导单元的输出；每个承重概念配一个显形分叉、并锚回抽象点的叙事例子；自造术语给白话注解；适用边界、置信分层、反例与未知项成节保留，不为收束压掉。
+- **落盘关口**：第三档产物或对外发布物做冷读裸测，第二档做落笔自查（以 `writing-expression` 为准）。
+
 ## 与上层流程的关系
 
 研讨心态是搜索姿态，不是完整 workflow。
@@ -202,3 +215,4 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 8. 它允许多分支研讨：当多个灵魂点或下一问题会导向不同路线时，先保留分叉；是否需要隔离聚焦及如何隔离，引用 `f-attention-budget-constraint` 的当前规则。
 9. 它与注意力预算天然配合：方向判断、核心命名、候选筛选、现实约束、分支关系和下一问题都是研讨语境里的常见承重内容单元；具体确认机制以 `f-attention-budget-constraint` 为准。
 10. 它与假设台账以相变点衔接：研讨全程是台账语义下的草稿区，武装只是待命标注；锋利判断一旦被当作前提继续盖东西，处置以 `f-hypothesis-ledger` 为准。
+11. 它可选地衔接一种落盘交付：结论需要长期复用或用户要求时，按 `references/conclusion-doc-writing-spec.md` fork Subagent、走 `f-attention-budget-constraint` 写成完整说明文档；这是研讨之外的交付动作，不是默认收尾。
