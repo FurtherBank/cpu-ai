@@ -1,6 +1,6 @@
 ---
 name: discussion-mindset
-description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, optionally handing finalized conclusions off to a complete explainer document (per references/conclusion-doc-writing-spec.md) when the user asks or the conclusions need durable reuse, while referencing f-attention-budget-constraint for attention-budget gating instead of duplicating that protocol, without turning the skill into a fixed output template, validation workflow, or execution plan.
+description: Use when the user wants Codex to adopt a discussion/research/innovation mindset as a direction-calibration layer - shifting attention from completing the current answer or plan toward finding one or more higher-potential possibilities under real-world constraints; following fuzzy value gravity, surfacing possible "soul points", pressure-testing assumptions, preserving valuable uncertainty, generating better next questions, and considering forked or parallel exploration when multiple branches may matter, optionally handing already-established conclusions to cognitive-narrative-writing when a defined reader needs to reconstruct, question, and reuse them, while referencing f-attention-budget-constraint for attention-budget gating instead of duplicating that protocol, without turning the skill into a fixed output template, validation workflow, or execution plan.
 ---
 
 # 研讨心态
@@ -164,18 +164,44 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 
 不要为了展示研讨而拖慢用户真正要的执行。
 
-## 研讨结论的落盘说明文档（可选交付）
+## 将研讨结果写成认知叙事（可选交付）
 
-把研讨结论写成一份完整、可长期复用的说明文档，是研讨之外的交付动作，不是研讨本体的默认收尾。它就是本文末尾「如果用户明确要求这些动作……切换到对应的交付流程」所指的交付流程之一。
+把研讨结果写成可长期复用的对外说明，是研讨之外的交付动作，不是研讨本体的默认收尾。需要这种交付时，默认体裁是**认知叙事**，并调用 `cognitive-narrative-writing` 编写；它的目标不是把研讨摘要写得更顺，而是让已界定读者能够重建、质疑、迁移这组判断。
 
-仅在**用户明确要求**、或**结论需要长期复用 / 跨语境引用 / 交给第三方而口头小结已承载不住**时才做。只想让用户看见研讨过程、或留接力接口，用上面「对外呈现」的问题包即可，不要升级到这一步。
+这不是“凡是要落盘就写成认知叙事”。只有读者需要理解一个对象区分、依据、推理桥、价值取舍、边界或替代路径，并在条件变化时知道何时改走，才适用。纯检索或定位材料、变更记录、原始证据索引、即时告警、操作清单、命令手册、开放的问题包，以及主要目的属于其他体裁的交付，不应被强行拉成长叙事；最多借用其中的条件可见性和可回查原则。
 
-触发时，按 [`references/conclusion-doc-writing-spec.md`](references/conclusion-doc-writing-spec.md) 写作，本文只给要点，完整规格与自检清单在该 reference：
+### 先判定是否可写
 
-- **前置硬条件**：文档要写的每个核心结论必须已单点封口；文档是整合呈现，不在写作时补推导。
-- **产出方式**：研讨上下文较重时，fork 一个 Subagent 承担写作（用 `f-attention-budget-constraint` 的 fork 方式继承整段研讨历史，从而拿到全部封口结论），该写作线程走 `f-attention-budget-constraint`，把核心定义、每个叙事例子、边界与置信声明当承重内容单元处理。上下文很轻时可不 fork，直接在主线按规格写。
-- **体裁要点**：按读者动线组织，不照搬推导单元的输出；每个承重概念配一个显形分叉、并锚回抽象点的叙事例子；自造术语给白话注解；适用边界、置信分层、反例与未知项成节保留，不为收束压掉。
-- **落盘关口**：第三档产物或对外发布物做冷读裸测，第二档做落笔自查（以 `writing-expression` 为准）。
+仅在用户明确要求、或结论需要长期复用、跨语境引用或交给第三方，且下列条件同时成立时，才把它交给 `cognitive-narrative-writing`：
+
+- 已有明确读者、阅读任务与读完后的可观察判断能力；读者不只需要接收结论，而需要能够重建、质疑或迁移它。
+- 每条将被作为结论写入主线的判断都已单点封口：当前能主张到什么强度、依据与范围是什么、强反例或失败方式是什么、尚有哪些未知，均已可追溯。
+- 未知、待决定项或仍开放分支本身已被界定：它影响什么、当前不能声称什么、由谁或什么信息重开；“可写”不等于“没有未知”。
+
+关键定义、因果、必要性、价值取舍或授权边界仍会改变主结论或行动路线时，当前状态是“继续研讨”，不是“写一篇结论文档”。最多输出明确标为开放的研讨问题包；不得借叙事把暂定内容包装成已成立结论。
+
+### 交给写作前，冻结可写性契约
+
+不要只在研讨最后加一句“调用认知叙事”。写作者若没有读者入口、材料地位和分支状态，就会用常识或顺滑语言补桥。交接前只需冻结下列最小信息，不再另写一份研讨总结：
+
+```text
+交接判定与研讨版本：可写／继续研讨；结论来源或裁定卡版本
+读者契约：目标读者、可假定前提、阅读任务、终态能力、非目标
+封口结论索引：每条可进入主线的判断及其范围、强度、来源指针
+材料与例证边界：可用材料；事实、推断、价值前提与假设例子的标记规则
+分支与未知：竞争／互补／层级关系；开放状态、读者影响、责任归属与重开条件
+写作权限：可重排、解释、显露分支；不可新增内容结论、提高强度、替人决定价值或授权
+```
+
+多个已封口的竞争分支可以写成条件性路径；没有明确决定权时，写作者不得擅自选其中一个做唯一主线。互补或层级分支可按读者依赖重排，但不得合并掉其差异。情境例子可以帮助读者看见分叉，却不得补造事实、扩大原结论，或以生动性替代依据。
+
+### 调用认知叙事写作并保持职责边界
+
+将这份契约连同结论来源交给 `cognitive-narrative-writing`。写作阶段只负责把读者从入口带到终态：重排已封口的结论、标明材料如何更新理解、把条件、替代路径和未知放在判断发生处，并保留读者回查依据的入口。它不重新研究内容模型，也不把研讨中的内部推导顺序原样拼接给读者。
+
+写作中若发现缺少读者前提、可用依据或材料角色，应退回一张缺口卡，写明缺什么、阻断哪次理解转移、由谁补；不得用修辞补全。若缺口涉及定义、必要性、因果、价值取舍或权源本身，交回研究性内容判断；裁定返回后，重跑受影响的入口、桥、分支和终态。
+
+研讨上下文很重时，是否 fork 写作线程仍由 `f-attention-budget-constraint` 的隔离条件决定；fork 可以减少转述失真，却不能替代这份可写性契约。成文后按 `cognitive-narrative-writing` 的作者侧自检处理；高风险、长命或对外文档再进入认知叙事审查与相应的冷读关口。审查只验证读者路径，不替写作阶段裁定内容。
 
 ## 与上层流程的关系
 
@@ -209,4 +235,4 @@ description: Use when the user wants Codex to adopt a discussion/research/innova
 7. 它不吸收验证、PoC、淘汰和执行收束；这些由上层工作流承接。
 8. 它允许多分支研讨：当多个灵魂点或下一问题会导向不同路线时，先保留分叉；是否需要隔离聚焦及如何隔离，引用 `f-attention-budget-constraint` 的当前规则。
 9. 它与注意力预算天然配合：方向判断、核心命名、候选筛选、现实约束、分支关系和下一问题都是研讨语境里的常见承重内容单元；具体确认机制以 `f-attention-budget-constraint` 为准。
-10. 它可选地衔接一种落盘交付：结论需要长期复用或用户要求时，按 `references/conclusion-doc-writing-spec.md` fork Subagent、走 `f-attention-budget-constraint` 写成完整说明文档；这是研讨之外的交付动作，不是默认收尾。
+10. 它可选地衔接一种落盘交付：只有已界定读者需要可重建、可质疑、可迁移地使用已封口判断时，才按可写性契约调用 `cognitive-narrative-writing` 写成认知叙事；这是研讨之外的交付动作，不是默认收尾。
