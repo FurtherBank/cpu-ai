@@ -1,0 +1,4 @@
+interface:
+  display_name: "T-Imagine"
+  short_description: "单场景端到端想象推演、异常分支发现与执行前风险排查"
+  default_prompt: "Use $t-imagine to simulate one concrete task scenario end to end before any real execution."
