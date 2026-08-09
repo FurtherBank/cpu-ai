@@ -1,0 +1,4 @@
+interface:
+  display_name: "调查研究"
+  short_description: "把现实问题研究成可追溯、可判断、可行动的下一步依据"
+  default_prompt: "使用 $investigation-research 调查这个现实问题，并形成可直接支持下一步判断的研究结果。"
