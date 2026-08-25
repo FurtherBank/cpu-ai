@@ -1,4 +1,4 @@
 interface:
   display_name: "调查研究"
-  short_description: "把现实问题研究成可追溯、可判断、可行动的下一步依据"
-  default_prompt: "使用 $investigation-research 调查这个现实问题，并形成可直接支持下一步判断的研究结果。"
+  short_description: "把分散材料归纳成可追溯、易理解的信息全貌与规律"
+  default_prompt: "使用 $investigation-research 定界研究对象、关系驱动搜索并还原定位材料，归纳六层信息体系、规律性特征和最简单清晰的主线认知叙事；不要替我评价、筛选、排序或推荐实际方案。"

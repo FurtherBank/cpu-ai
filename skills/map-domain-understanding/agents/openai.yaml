@@ -1,0 +1,4 @@
+interface:
+  display_name: "体系认知地图"
+  short_description: "把复杂领域建成可验证、可遍历、可交接写作的认知地图"
+  default_prompt: "使用 $map-domain-understanding 为这个领域建立体系认知地图和读者遍历路线。"
