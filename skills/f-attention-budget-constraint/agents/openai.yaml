@@ -1,7 +1,7 @@
 interface:
   display_name: "Attention Budget Constraint"
-  short_description: "Protect critical confirmation points"
-  default_prompt: "Use $f-attention-budget-constraint to handle a dense reasoning or writing task without diluting critical confirmation points."
+  short_description: "Match the approach to the user's goal and key decisions"
+  default_prompt: "Use $f-attention-budget-constraint to work toward my intended outcome, check the judgments that could change direction, and order the work by what it depends on."
 
 policy:
   allow_implicit_invocation: true
