@@ -32,6 +32,11 @@ dist/
 build/
 out/
 
+# Preserve the previously tracked lite edition in the skill archive
+!/archive/skills/human-writing/dist/
+/archive/skills/human-writing/dist/*
+!/archive/skills/human-writing/dist/human-writing-lite.md
+
 # Temporary files
 tmp/
 temp/

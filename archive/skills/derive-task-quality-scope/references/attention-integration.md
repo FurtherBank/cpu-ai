@@ -1,6 +1,6 @@
 # 注意力预算接入
 
-本 Skill 直接受 [`f-attention-budget-constraint`](../../f-attention-budget-constraint/SKILL.md) 约束，不复制其完整协议。
+本 Skill 直接受 [`f-attention-budget-constraint`](../../../../skills/f-attention-budget-constraint/SKILL.md) 约束，不复制其完整协议。
 
 ## 常见承重内容单元
 

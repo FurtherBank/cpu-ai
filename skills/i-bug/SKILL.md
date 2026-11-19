@@ -2,7 +2,7 @@
 name: i-bug
 description: |
   资深工程师视角的 Bug 定位与修复工作流。基于「线索心智」（把每个异常表现当线索，层层推理锁定问题范围）和「假设-验证循环」（偶现/疑难 Bug 专项方法论），完成从接收工单到归档关闭的完整闭环。
-  适用于：由 i-todo 路由的 bug 类任务；受理入轨后类型为 bug 或由 iteration-ctl 派发至本技能时调用；或直接 @i-bug 触发处理单个 Bug 工单。
+  适用于：受理入轨后类型为 bug、由 iteration-ctl 派发至本技能，或直接 @i-bug 处理单个 Bug 工单。
 iterationStages:
   - PLANNING
   - EXECUTION

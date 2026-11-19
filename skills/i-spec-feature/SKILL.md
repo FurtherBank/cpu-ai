@@ -16,12 +16,12 @@ skillKind: stage-bound
 ## 核心约束
 
 1. **PLANNING 必须完全收敛**：所有落点、字段名、设计决策必须在规划阶段确定；EXECUTION 不再做设计探索；EXECUTION 一旦发现 plan 留白，立即按 CRITICAL 流程阻断。
-2. **EXECUTION 不写测试**：仅做编码 + `build` 编译自洽校验，**不**编写、**不**执行任何测试代码或单测命令；行为校验留给 `i-verify`。
+2. **EXECUTION 不写测试**：仅做编码 + `build` 编译自洽校验，**不**编写、**不**执行任何测试代码或单测命令。交付后可用变更计划中的自测用例验证运行时行为。
 3. **风险信号雷达**：编码过程中发现的风险信号只**记录**、**不**修复、**不**扩散。
 
 ## 边界外约定（上游负责拆分）
 
-单次 `i-spec-feature` 调用仅处理**一个独立子需求**。当一个完整需求横跨多个独立范围（如同时涉及多个互不重叠的子系统）时，由 `i-todo` / `i-dima-resolve` 在入轨时**拆为多个 reqId**，每个 reqId 对应独立的 `design.md` / `change-plan.md` / `change-execute` 产物。本技能**不**做切片、**不**做并行编排、**不**做跨需求合并。
+单次 `i-spec-feature` 调用仅处理**一个独立子需求**。当一个完整需求横跨多个独立范围（如同时涉及多个互不重叠的子系统）时，调用方先**拆为多个 reqId**，每个 reqId 对应独立的 `design.md` / `change-plan.md` / `change-execute` 产物。本技能**不**做切片、**不**做并行编排、**不**做跨需求合并。
 
 > **调度兼容说明**：本 skill 支持由 `iteration-ctl tick` / `dispatch` 在 `PLANNING` 或 `EXECUTION` 阶段派发；也支持直接 `@i-spec-feature` 调用。若没有迭代上下文注入，则按线性流程执行。
 
@@ -84,4 +84,4 @@ skillKind: stage-bound
 3. MUST 类条款**必须 100% 有变更条目覆盖**或显式标注「不适用：原因」；发现遗漏立刻补条目。
 4. EXECUTION **绝对禁止**自主探索、编写或运行任何测试。
 5. **粒度留白须显式声明**：原则上极少出现；凡有意授权 EXECUTION 自行决策的点，必须用「粒度留白（已授权）」格式标注，否则视为 plan 设计缺陷。
-6. **超大需求**应在 `i-todo` / `i-dima-resolve` 入轨阶段即拆为多个独立 reqId（design + plan + execute 各自独立产物），本技能不做切片合并。
+6. **超大需求**由调用方提前拆为多个独立 reqId，各自产出 design、plan 和 execute 制品。

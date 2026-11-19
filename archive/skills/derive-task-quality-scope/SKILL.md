@@ -12,7 +12,7 @@ description: |
 
 ## 行为日志执行协议
 
-- **规范引用**：[behavior-log/v1 契约](../behavior-log-audit/references/behavior-log-v1-contract.md)；日志骨架：[behavior-log-skeleton.md](../behavior-log-audit/templates/behavior-log-skeleton.md)
+- **规范引用**：[behavior-log/v1 契约](../../../skills/behavior-log-audit/references/behavior-log-v1-contract.md)；日志骨架：[behavior-log-skeleton.md](../../../skills/behavior-log-audit/templates/behavior-log-skeleton.md)
 - **路径**：`{workspaceRoot}/.skill-logs/derive-task-quality-scope/yyyy-mm-dd/hhmm-<任务标题slug>.md`
 - **初始化**：首次读取决定性来源或写入质量范围产物之前。写入元数据、执行边界、状态 `执行中`。任务标题取自用户原始任务的首个非空目标句，规范化为 slug
 - **增量更新触发点**：
