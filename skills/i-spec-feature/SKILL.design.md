@@ -33,7 +33,7 @@
 | C   | 接口/路由定义文件                       | ripgrep / SemanticSearch                                                                                                                                         |
 | D   | 服务间依赖配置（go.mod / package.json） | 主控读取对应文件                                                                                                                                                 |
 | E   | 「粒度」概念参考                        | `references/粒度定义.md`                                                                                                                                         |
-| F   | 代码风险信号参考                        | `.cursor/skills/feature/references/代码风险信号.md`                                                                                                              |
+| F   | 代码风险信号参考                        | `skills/i-spec-feature/references/代码风险信号.md`                                                                                                              |
 | G   | 各阶段指导文件                          | `workflow/step1-plan.md`、`workflow/step2-execute-init.md`、`workflow/step3-execute-loop.md`、`workflow/step4-execute-report.md`（按需读取，到达对应阶段时再读） |
 
 ---
