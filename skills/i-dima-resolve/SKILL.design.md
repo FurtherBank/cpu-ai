@@ -6,7 +6,7 @@
 
 > **路径根**：下文凡 `.iteration/` 与 `{workspaceRoot}` 均指 **Cursor 工作区根目录**（studio 多仓顶层，与根级 `AGENTS.md`、`.cursor/` 同级），非各子项目 Git 根。
 
-> 依据：[任务步骤四要素推导方法论](../s-workflow-sop/references/task-step-schema.md)
+> 依据：[任务步骤四要素推导方法论](../../archive/skills/s-workflow-sop/references/task-step-schema.md)
 
 ---
 
