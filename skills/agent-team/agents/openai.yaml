@@ -1,4 +1,0 @@
-interface:
-  display_name: "Agent 团队执行"
-  short_description: "按目标组织独立战略、执行、监督与验证，保存交接证据并支持新会话接手"
-  default_prompt: "使用 $agent-team 推进下面的任务，按需要启用独立角色，对完整交付负责："
