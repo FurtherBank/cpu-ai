@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hyperagent"
+  short_description: "按任务风险组织多 Agent 协作并推动收敛"
+  default_prompt: "使用 $hyperagent 组织当前任务，先判断适用模式，再按职责边界推进、验证和关闭。"
